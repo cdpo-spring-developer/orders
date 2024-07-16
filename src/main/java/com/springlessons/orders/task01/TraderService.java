@@ -18,7 +18,7 @@ public class TraderService {
                 .build();
     }
 
-    public Mono<Object> getTraders(List<Integer> traderIds) {
+    public Mono<Trader> getTraders(List<Integer> traderIds) {
         String ids = String.join(",", traderIds.stream().map(String::valueOf).toList());
         return webClient.get() // http method
                 .uri("/api/v1/traders/{id}\n", ids)
@@ -28,7 +28,7 @@ public class TraderService {
                     if (!voidResponseEntity.getStatusCode().is2xxSuccessful()) {
                         return Mono.just(new Trader());
                     }
-                    return Mono.just(Trader.class);
+                    return Mono.just(voidResponseEntity.getBody());
                 });
     }
 }

@@ -18,7 +18,7 @@ public class UserService {
                 .build();
     }
 
-    public Mono<Object> getUsers(List<Integer> userIds) {
+    public Mono<User> getUsers(List<Integer> userIds) {
         String ids = String.join(",", userIds.stream().map(String::valueOf).toList());
         return webClient.get() // http method
                 .uri("/api/v1/user/{id}", ids)
@@ -28,7 +28,7 @@ public class UserService {
                     if (!voidResponseEntity.getStatusCode().is2xxSuccessful()) {
                         return Mono.just(new User());
                     }
-                    return Mono.just(User.class);
+                    return Mono.just(voidResponseEntity.getBody());
                 });
     }
 }

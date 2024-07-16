@@ -19,7 +19,7 @@ public class ProductService {
                 .build();
     }
 
-    public Mono<Object> getProducts(List<Integer> productIds) {
+    public Mono<Product> getProducts(List<Integer> productIds) {
         String ids = String.join(",", productIds.stream().map(String::valueOf).toList());
         return webClient.get() // http method
                 .uri(" /api/v1/catalog/product/{id}", ids)
@@ -29,7 +29,7 @@ public class ProductService {
             if (!voidResponseEntity.getStatusCode().is2xxSuccessful()) {
                 return Mono.just(new Product());
             }
-            return Mono.just(Product.class);
+            return Mono.just(voidResponseEntity.getBody());
         });
     }
 }
