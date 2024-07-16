@@ -1,7 +1,6 @@
 package com.springlessons.orders.task01;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -19,11 +18,17 @@ public class UserService {
                 .build();
     }
 
-    public Mono<ResponseEntity<User>> getUsers(List<Integer> userIds) {
+    public Mono<Object> getUsers(List<Integer> userIds) {
         String ids = String.join(",", userIds.stream().map(String::valueOf).toList());
         return webClient.get() // http method
                 .uri("/api/v1/user/{id}", ids)
                 .retrieve()
-                .toEntity(User.class);
+                .toEntity(User.class)
+                .flatMap(voidResponseEntity -> {
+                    if (!voidResponseEntity.getStatusCode().is2xxSuccessful()) {
+                        return Mono.just(new User());
+                    }
+                    return Mono.just(User.class);
+                });
     }
 }

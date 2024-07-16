@@ -8,11 +8,4 @@ public class Trader {
     private String name;
     private String inn;
     private String phone;
-
-    public Mono<Trader> traderMono() {
-        return Mono.just(
-                new Trader()
-        );
-    }
-
 }

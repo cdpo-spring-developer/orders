@@ -8,10 +8,4 @@ import reactor.core.publisher.Mono;
 public class Product {
     private String name;
 
-    public Mono<Product> productMono() {
-        return Mono.just(
-                new Product()
-        );
-    }
-
 }

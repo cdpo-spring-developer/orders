@@ -1,7 +1,6 @@
 package com.springlessons.orders.task01;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -19,11 +18,17 @@ public class TraderService {
                 .build();
     }
 
-    public Mono<ResponseEntity<Trader>> getTraders(List<Integer> traderIds) {
+    public Mono<Object> getTraders(List<Integer> traderIds) {
         String ids = String.join(",", traderIds.stream().map(String::valueOf).toList());
         return webClient.get() // http method
                 .uri("/api/v1/traders/{id}\n", ids)
                 .retrieve()
-                .toEntity(Trader.class);
+                .toEntity(Trader.class)
+                .flatMap(voidResponseEntity -> {
+                    if (!voidResponseEntity.getStatusCode().is2xxSuccessful()) {
+                        return Mono.just(new Trader());
+                    }
+                    return Mono.just(Trader.class);
+                });
     }
 }
