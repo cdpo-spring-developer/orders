@@ -15,6 +15,10 @@ public interface OrderRepository extends ReactiveMongoRepository<Order, UUID> {
     // fields - поля, по которым будут извлекаться данные
     @Query(value = "{userId :  ?0}", fields = "{picturesIds: 1, orderedAt:  1}")
     Flux<Order> orderWithUserId(int userId);
+
+    @Query(value = "{userId : ?0, price {$ge: 100}}",
+            fields = "{orderIds: 1}")
+    Flux<Order> orderByUserIdAndPrice(int userId, double price);
     // sort({userId: -1})
     // find({userId: {$gte: 100, $lte: 300}})
     // find({userId: {$in: [3, 78, 12]}})
