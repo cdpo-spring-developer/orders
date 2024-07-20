@@ -5,14 +5,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.List;
+import java.util.UUID;
 
 @Document
 @Data
 public class Order {
     @MongoId
-    private String id;
+    private UUID id;
     private String name;
-    List<Product> products;
+    List<ProductDAO> products;
     private double commonPrice;
     private boolean active;
 
